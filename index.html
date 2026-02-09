@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Vòng quay Năm Mới 2026 — Tết Việt (Bốc lì xì)</title>
+
+  <!-- liên kết CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="bg-texture" aria-hidden="true"></div>
+  <div class="light-sweep" aria-hidden="true"></div>
+  <div id="goldDust" class="gold-dust" aria-hidden="true"></div>
+
+  <div class="lantern s1" aria-hidden="true" style="width:92px;height:170px">
+    <!-- lantern SVG shortened for brevity -->
+    <svg viewBox="0 0 80 160" width="100%" height="100%"><defs><linearGradient id="lg1" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ffd54f"/><stop offset="1" stop-color="#ff7043"/></linearGradient></defs><g transform="translate(40,10)"><ellipse cx="0" cy="20" rx="28" ry="12" fill="#3b1f1f" opacity="0.05"/><ellipse cx="0" cy="38" rx="36" ry="22" fill="url(#lg1)"/><rect x="-36" y="38" width="72" height="14" rx="6" fill="url(#lg1)" opacity="0.95"/></g></svg>
+  </div>
+  <div class="lantern s2" aria-hidden="true" style="width:120px;height:200px">
+    <svg viewBox="0 0 100 160" width="100%" height="100%"><defs><linearGradient id="lg2" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ffd54f"/><stop offset="1" stop-color="#ff8a00"/></linearGradient></defs><g transform="translate(50,12)"><ellipse cx="0" cy="20" rx="36" ry="12" fill="#3b1f1f" opacity="0.05"/><ellipse cx="0" cy="44" rx="44" ry="26" fill="url(#lg2)"/></g></svg>
+  </div>
+
+  <canvas id="fwCanvas" style="position:fixed;inset:0;z-index:6;pointer-events:none"></canvas>
+  <div id="petal-root" style="position:fixed;inset:0;z-index:7;pointer-events:none"></div>
+
+  <div class="container" role="main">
+    <section class="main" aria-label="Vòng quay">
+      <div class="couplet left">Phúc</div>
+      <div class="couplet right">Lộc</div>
+
+      <div class="header">
+        <div class="logo">26</div>
+        <div class="title">
+          <h1>Vòng quay Năm Mới 2026</h1>
+          <p>Phong cách: Tết truyền thống kết hợp hiệu ứng hiện đại — Chúc Anh yêu may mắn!</p>
+        </div>
+
+        <div style="margin-left:auto;display:flex;gap:10px;align-items:center">
+          <button id="shuffleBtn" class="shuffle-btn" title="Xáo ngẫu nhiên phần thưởng" type="button">Xáo phần thưởng</button>
+          <button id="modeToggle" class="small-btn" title="Chuyển chế độ" type="button">Chuyển sang Bốc lì xì</button>
+          <button id="pointerFix" class="small-btn" title="Đặt kim cố định (dưới / trên)" type="button">Kim: Dưới</button>
+          <button id="musicToggle" class="small-btn" type="button">Nhạc: Tắt</button>
+          <button id="sfxToggle" class="small-btn" type="button">Hiệu ứng: Bật</button>
+        </div>
+      </div>
+
+      <div id="wheelSection" class="wheel-wrap">
+        <div class="wheel-card">
+          <div class="outer-ring" aria-hidden="true"></div>
+          <div class="glow-ring" aria-hidden="true"></div>
+          <svg id="wheel" viewBox="0 0 500 500" role="img" aria-hidden="false"></svg>
+          <div class="center-plaque">Quay</div>
+          <div id="pointer" class="pointer" aria-hidden="false" title="Mũi tên — phần thưởng trúng">
+            <svg width="76" height="56" viewBox="0 0 76 56" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <defs>
+                <linearGradient id="arrowGrad" x1="0" x2="1">
+                  <stop offset="0" stop-color="#fff7d0"/>
+                  <stop offset="0.45" stop-color="#ffef9c"/>
+                  <stop offset="1" stop-color="#ffd54f"/>
+                </linearGradient>
+                <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="rgba(0,0,0,0.25)"/>
+                </filter>
+              </defs>
+              <g filter="url(#shadow)">
+                <polygon class="pulse" points="38,0 8,36 68,36" fill="url(#arrowGrad)"/>
+                <rect x="18" y="28" width="40" height="8" rx="4" fill="#fff4c2" opacity="0.92"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div id="envelopeSection" class="envelope-area" style="display:none;">
+        <div class="envelope-form">
+          <label style="font-weight:800;color:#6b3b3b">Số phong bao:</label>
+          <input id="envelopeCount" type="number" min="1" max="24" value="8" style="width:80px;padding:8px;border-radius:8px;border:1px solid rgba(0,0,0,0.08)"/>
+          <button id="createEnvelopes" class="small-btn" type="button">Tạo lì xì</button>
+          <button id="closeEnvelopes" class="btn" style="background:linear-gradient(180deg,#8c1414,#6c0f0f)" type="button">Đóng</button>
+        </div>
+        <div id="envelopeGrid" class="envelope-grid"></div>
+        <div style="margin-top:10px;display:flex;justify-content:center;gap:8px">
+          <button id="openAllBtn" class="small-btn" type="button">Mở toàn bộ</button>
+        </div>
+      </div>
+
+      <div class="spin-area" id="actionArea">
+        <button id="spinBtn" class="spin-btn" type="button">Quay ngay!</button>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:12px;justify-content:center;margin-top:8px">
+        <div style="font-weight:800;color:#5a2b2b" id="modeNote">Kim ở dưới — đầu nhọn chỉ lên vào phần thưởng khi dừng</div>
+      </div>
+
+      <div class="side-prizes" id="sidePrizes" aria-hidden="false"></div>
+    </section>
+
+    <aside class="side" aria-label="Thêm phần thưởng">
+      <div class="heading">Thêm phần thưởng</div>
+      <div class="add-row">
+        <input id="prizeInput" placeholder="Ví dụ: Lì xì 50.000đ" aria-label="Nhập phần thưởng" />
+        <button id="addBtn" class="btn" type="button">Thêm</button>
+      </div>
+
+      <div style="margin-bottom:8px;font-weight:800;color:#6b3b3b">Danh sách phần thưởng (bấm ✕ để xóa):</div>
+      <div id="prizeList" class="list-area" role="list"></div>
+
+      <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap">
+        <button id="importSample" class="small-btn" type="button">Thêm mẫu Tết</button>
+        <button id="clearBtn" class="btn" style="background:linear-gradient(180deg,#8c1414,#6c0f0f)" type="button">Xóa hết</button>
+      </div>
+
+      <div style="margin-top:12px;color:#7a3b3b;font-size:13px">Mỗi lần thêm sẽ tự chia đều các ô vòng quay.</div>
+    </aside>
+  </div>
+
+  <div id="overlay" class="overlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true">
+      <h3>Bạn đã trúng:</h3>
+      <p id="resultPrize" style="font-size:20px"></p>
+      <button id="closeOverlay" class="close" type="button">OK</button>
+    </div>
+  </div>
+
+  <div id="confetti" class="confetti" aria-hidden="true"></div>
+
+  <!-- liên kết script (cuối body để DOM đã sẵn sàng) -->
+  <script src="script.js"></script>
+</body>
+</html>
