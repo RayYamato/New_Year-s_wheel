@@ -147,7 +147,7 @@
 
   if(clearBtn) clearBtn.addEventListener('click', ()=>{ if(spinning) return; if(confirm('Xóa hết phần thưởng?')){ prizes=[]; renderLists(); renderWheel(); }});
   if(importSample) importSample.addEventListener('click', ()=> {
-    const samples = ['1k','100k','mất lượt','5k','gấp đôi người trước','10k','thêm lượt','20k','chúc mừng năm mới','50k','hẹn năm sau','30k','lì xì lại chủ nhà 20k','2k','một nửa người trước','15k','tất cả vỗ tay','40k','lì xì lại chủ nhà 50k'];
+    const samples = ['1k','100k','mất lượt','5k','gấp đôi người trước','10k','thêm lượt','20k','chúc mừng năm mới','50k','hẹn năm sau','30k','lì xì lại chủ nhà 20k','2k','một nửa người trước','15k','tất cả vỗ tay','40k','lì xì lại chủ nhà 50k','bốc phong bao bất kỳ'];
     for(const s of samples) if(!prizes.includes(s)) prizes.push(s);
     renderLists(); renderWheel();
   });
@@ -486,6 +486,7 @@
   window._shufflePrizes = shufflePrizes;
 
 })();
+
 
 
 
